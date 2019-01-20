@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="_css/vis.css">
+    <link rel="stylesheet" href="_css/style.css">
+    <link rel="stylesheet" href="">
+    <script src="_jss/vis.js"></script>
+</head>
+<body>
+    <div id="container-grafo"></div>
+
+    <input type="text" id="origem">
+    <input type="text" id="destino">
+    <label id="result"></label>
+    <button type="submit" onclick="getDados()">Alterar</button>
+    <button onclick="test()">Ver</button>
+
+
+<script type="text/javascript">
+var contadorN = 0;
+var contadorE =0;
+function getDados(){
+    const origem = document.getElementById('origem').value;
+    const destino = document.getElementById('destino').value;
+}
+var nos =[];
+var arestas = [];
+    // create an array with nodes
+    var nodes = new vis.DataSet([
+    
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+       
+    
+    ]);
+
+    // create a network
+    var container = document.getElementById('container-grafo');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        //inicio config aresta
+        edges:{
+            arrows: {
+      to:     {enabled: true, scaleFactor:1, type:'arrow'},
+      middle: {enabled: false, scaleFactor:1, type:'arrow'},
+      from:   {enabled: false, scaleFactor:1, type:'arrow'}
+    },
+    color: 'red',
+    font: '12px arial #ff0000',
+    scaling:{
+      label: true,
+    },
+    shadow: true,
+    smooth: true,
+  },
+  //inicion intereção
+  interaction:{
+    dragNodes:true,
+    dragView: true,
+    hideEdgesOnDrag: false,
+    hideNodesOnDrag: false,
+    hover: true,
+    hoverConnectedEdges: true,
+    keyboard: {
+      enabled: false,
+      speed: {x: 10, y: 10, zoom: 0.02},
+      bindToWindow: true
+    },
+    multiselect: false,
+    navigationButtons: true,
+    selectable: true,
+    selectConnectedEdges: true,
+    tooltipDelay: 300,
+    zoomView: true
+    },
+    //fim
+    //inicio config layout
+    layout: {
+    randomSeed: 0,
+    improvedLayout:false
+  },
+  //inicion config manipulation
+  manipulation: {
+    enabled: true,
+    initiallyActive: true,
+    addNode: function (data, callback) {
+        contadorN++
+        nos.push(contadorN)
+            data.id = contadorN;
+            data.label = ""+contadorN;
+            callback(data);
+        },
+        addEdge: function (data, callback) {
+            contadorE++;
+            arestas.push(contadorE)
+            data.id = ""+contadorE;
+            callback(data);
+        },
+    editNode:true,
+    editEdge: true,
+    deleteNode: true,
+    deleteEdge: true,
+    controlNodeStyle:{
+      // all node options are valid.
+    }
+  },
+  //inicion config fisica
+  physics:{
+    enabled: false,
+    barnesHut: {
+      gravitationalConstant: -2000,
+      centralGravity: 0.3,
+      springLength: 95,
+      springConstant: 0.04,
+      damping: 0.09,
+      avoidOverlap: 0
+    },
+    forceAtlas2Based: {
+      gravitationalConstant: -50,
+      centralGravity: 0.01,
+      springConstant: 0.08,
+      springLength: 100,
+      damping: 0.4,
+      avoidOverlap: 0
+    },
+    repulsion: {
+      centralGravity: 0.2,
+      springLength: 200,
+      springConstant: 0.05,
+      nodeDistance: 100,
+      damping: 0.09
+    },
+    hierarchicalRepulsion: {
+      centralGravity: 0.0,
+      springLength: 100,
+      springConstant: 0.01,
+      nodeDistance: 120,
+      damping: 0.09
+    },
+    maxVelocity: 50,
+    minVelocity: 0.1,
+    solver: 'barnesHut',
+    stabilization: {
+      enabled: false,
+      iterations: 1000,
+      updateInterval: 100,
+      onlyDynamicEdges: false,
+      fit: true
+    },
+    timestep: 0.5,
+    adaptiveTimestep: true
+  },
+
+  nodes:{
+    borderWidth: 1,
+    borderWidthSelected: 2,
+    brokenImage:undefined,
+    chosen: true,
+    color: {
+      border: '#000',
+      background: '#fff',
+      highlight: {
+        border: '#151F3D',
+        background: '#fff'
+      },
+      hover: {
+        border: '#151F3D',
+        background: '#fff'
+      }
+    },
+    fixed: {
+      x:false,
+      y:false
+    }
+}
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+    network.on('click',function(params){
+            if(params.edges.length >0){
+               
+               var n = network.getSelectedNodes();
+               var e = network.getSelectedEdges();
+              var ni = parseInt(n);
+              var ei = parseInt(e)
+              alert(e);
+              var tam = e.length;
+
+             if(tam>1){
+               if(ni<ni+1){
+              for(let x=0;x<tam;x++){
+                  edges.update({id:parseInt(e[x]),from:ni+parseInt(e[x]),to:ni})
+              }
+               }else{
+                edges.update({id:parseInt(e[x]),from:ni-1,to:ni})
+               }
+             }else{
+              edges.update({id:parseInt(e),from:ni+1,to:ni})
+             }
+               
+                
+            }
+    });
+</script>
+</body>
+</html>
