@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Definitividade de formas quadraticas</title>
+    <link rel="stylesheet" href="_css/reset.css">
+    <link rel="stylesheet" href="_css/vis.css">
+    <link rel="stylesheet" href="_css/style.css">
+
+    <script src="_jss/vis.js"></script>
+    <script src="_jss/mu.js"></script>
+</head>
+<body>
+<header id="header-main"><h1>Definitividade de forma quadraticas</h1></header>
+<section>
+    <header id="title">Definitividade de forma quadraticas</header>
+    <p>Formas quadráticas são expressões algébricas que têm papel importante em diferentes
+        áreas da ciência da computação, matemática, física, estatística e outras. Abordamos nesta
+        tese formas quadráticas racionais e formas inteiras, com coeficientes racionais e inteiros
+
+        respectivamente. Os métodos existentes para reconhecimento de formas quadráticas raci-
+        onais têm complexidade de tempo exponencial ou usam aproximações que deixam o re-
+        sultado menos confiável. Apresentamos um algoritmo polinomial que aprimora o melhor-
+        caso do reconhecimento de formas quadráticas para tempo constante. Ainda mais, novas
+
+        estratégias foram usadas para garantir a confiabilidade dos resultados, representando nú-
+        meros racionais como frações de inteiros, e para identificar combinações lineares que
+
+        são linearmente independentes, usando a redução de Gauss. Sobre o reconhecimento de
+        formas inteiras, identificamos que os algoritmos existentes têm complexidade de tempo
+
+        exponencial para o tipo fracamente não-negativa e polinomial para o tipo fracamente po-
+        sitiva. No entanto, o grau do polinômio depende da dimensão da álgebra e pode ser muito
+
+        grande. Apresentamos um algoritmo polinomial para o reconhecimento de formas intei-
+        ras fracamente positivas. Este algoritmo identifica restrições hipercríticas avaliando todo
+
+        subgrafo com 9 vértices do grafo associado à forma inteira. Através da busca em pro-
+        fundidade, uma estratégia similar pôde ser usada no reconhecimento do tipo fracamente
+
+        positiva. Por fim, mostramos que o reconhecimento de formas inteiras pode ser feito atra-
+        vés de mutações na matriz de troca relacionada.</p>
+</section>
+<div id="container-grafo"></div>
+
+<footer>Direitos reservado a Victor Henrique</footer>
+
+<script type="text/javascript">
+    var contadorN = 0;
+    var contadorE =0;
+    var caminho = [];
+    var nos =[];
+    var arestas = [];
+    // create an array with nodes
+    var nodes = new vis.DataSet([
+
+    ]);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+
+
+    ]);
+
+    // create a network
+    var container = document.getElementById('container-grafo');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        //inicio config aresta
+        edges:{
+            arrows: {
+                to:     {enabled: true, scaleFactor:1, type:'arrow'},
+                middle: {enabled: false, scaleFactor:1, type:'arrow'},
+                from:   {enabled: false, scaleFactor:1, type:'arrow'}
+            },
+            color: 'red',
+            font: '12px arial #ff0000',
+            scaling:{
+                label: true,
+            },
+            shadow: true,
+            smooth: true,
+        },
+        //inicion intereção
+        interaction:{
+            dragNodes:true,
+            dragView: true,
+            hideEdgesOnDrag: false,
+            hideNodesOnDrag: false,
+            hover: true,
+            hoverConnectedEdges: true,
+            keyboard: {
+                enabled: false,
+                speed: {x: 10, y: 10, zoom: 0.02},
+                bindToWindow: true
+            },
+            multiselect: false,
+            navigationButtons: true,
+            selectable: true,
+            selectConnectedEdges: true,
+            tooltipDelay: 300,
+            zoomView: true
+        },
+        //fim
+        //inicio config layout
+        layout: {
+            randomSeed: 0,
+            improvedLayout:false
+        },
+        //inicion config manipulation
+        manipulation: {
+            enabled: true,
+            initiallyActive: true,
+            addNode: function (data, callback) {
+                contadorN++;
+                nos.push(contadorN);
+                data.id = contadorN;
+                data.label = ""+contadorN;
+                callback(data);
+            },
+            addEdge: function (data,callback){
+                contadorE++;
+                data.id = contadorE;
+                caminho.push(data.id);
+                caminho.push(data.from);
+                caminho.push(data.to);
+                callback(data);
+            },
+            editNode:true,
+            editEdge: true,
+            deleteNode: true,
+            deleteEdge: true,
+            controlNodeStyle:{
+                // all node options are valid.
+            }
+        },
+        //inicion config fisica
+        physics:{
+            enabled: false,
+            barnesHut: {
+                gravitationalConstant: -2000,
+                centralGravity: 0.3,
+                springLength: 95,
+                springConstant: 0.04,
+                damping: 0.09,
+                avoidOverlap: 0
+            },
+            forceAtlas2Based: {
+                gravitationalConstant: -50,
+                centralGravity: 0.01,
+                springConstant: 0.08,
+                springLength: 100,
+                damping: 0.4,
+                avoidOverlap: 0
+            },
+            repulsion: {
+                centralGravity: 0.2,
+                springLength: 200,
+                springConstant: 0.05,
+                nodeDistance: 100,
+                damping: 0.09
+            },
+            hierarchicalRepulsion: {
+                centralGravity: 0.0,
+                springLength: 100,
+                springConstant: 0.01,
+                nodeDistance: 120,
+                damping: 0.09
+            },
+            maxVelocity: 50,
+            minVelocity: 0.1,
+            solver: 'barnesHut',
+            stabilization: {
+                enabled: false,
+                iterations: 1000,
+                updateInterval: 100,
+                onlyDynamicEdges: false,
+                fit: true
+            },
+            timestep: 0.5,
+            adaptiveTimestep: true
+        },
+
+        nodes:{
+            borderWidth: 1,
+            borderWidthSelected: 2,
+            brokenImage:undefined,
+            chosen: true,
+            color: {
+                border: '#000',
+                background: '#fff',
+                highlight: {
+                    border: '#151F3D',
+                    background: '#fff'
+                },
+                hover: {
+                    border: '#151F3D',
+                    background: '#fff'
+                }
+            },
+            fixed: {
+                x:false,
+                y:false
+            }
+        }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+    network.on('click',function(params){
+        if(params.edges.length >0){
+            var g = caminho.join();
+            var n = network.getSelectedNodes();
+            var e = network.getSelectedEdges();
+            var ni = parseInt(n);
+            var ei = parseInt(e);
+            alert(g);
+          for(let x=1;x<caminho.length;x++){
+              if(caminho[x] == ni){
+                  edges.update({id:caminho[x-1],from:caminho[x+1],to:caminho[x]});
+              }
+          }
+
+
+        }
+    });
+
+</script>
+</body>
+</html>
