@@ -50,10 +50,7 @@
 <script type="text/javascript">
 var contadorN = 0;
 var contadorE =0;
-function getDados(){
-    const origem = document.getElementById('origem').value;
-    const destino = document.getElementById('destino').value;
-}
+    var merda = [];
 var nos =[];
 var arestas = [];
     // create an array with nodes
@@ -122,15 +119,16 @@ var arestas = [];
     enabled: true,
     initiallyActive: true,
     addNode: function (data, callback) {
-        contadorN++
-        nos.push(contadorN)
+        contadorN++;
+        nos.push(contadorN);
             data.id = contadorN;
             data.label = ""+contadorN;
             callback(data);
         },
-        addEdge: function (data, callback) {
+        addEdge: function (data,callback){
             contadorE++;
-            arestas.push(contadorE)
+            merda.push(data.from);
+            merda.push(data.to);
             data.id = ""+contadorE;
             callback(data);
         },
@@ -217,14 +215,12 @@ var arestas = [];
     var network = new vis.Network(container, data, options);
     network.on('click',function(params){
             if(params.edges.length >0){
-               
-               var n = network.getSelectedNodes();
-               var e = network.getSelectedEdges();
-              var ni = parseInt(n);
-              var ei = parseInt(e)
-              alert(e);
-              var tam = e.length;
 
+                var n = network.getSelectedNodes();
+                var e = network.getSelectedEdges();
+                var ni = parseInt(n);
+                var ei = parseInt(e);
+                var tam = e.length;
              if(tam>1){
                if(ni<ni+1){
               for(let x=0;x<tam;x++){
@@ -243,6 +239,7 @@ var arestas = [];
 
             }
     });
+
 </script>
 </body>
 </html>
